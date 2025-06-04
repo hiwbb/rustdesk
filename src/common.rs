@@ -959,23 +959,38 @@ pub fn get_custom_rendezvous_server(custom: String) -> String {
 }
 
 #[inline]
-pub fn get_api_server(api: String, custom: String) -> String {
+pub fn get_api_server(_api: String, _custom: String) -> String {
     if Config::no_register_device() {
         return "".to_owned();
     }
-    let mut res = get_api_server_(api, custom);
-    if res.ends_with('/') {
-        res.pop();
-    }
-    if res.starts_with("https") && res.ends_with(":21114") {
-        return res.replace(":21114", "");
-    }
-    res
-}
-
-pub fn get_api_server(_api: String, _custom: String) -> String {
     // 直接返回固定的API服务器地址
     "http://192.168.1.245:21114".to_owned()
+}
+
+fn get_api_server_(api: String, custom: String) -> String {
+    #[cfg(windows)]
+    if let Ok(lic) = crate::platform::windows::get_license_from_exe_name() {Add commentMore actions
+        if !lic.api.is_empty() {
+            return lic.api.clone();
+        }
+    }
+    if !api.is_empty() {
+        return api.to_owned();
+    }
+    let api = option_env!("API_SERVER").unwrap_or_default();
+    if !api.is_empty() {
+        return api.into();
+    }
+    let s0 = get_custom_rendezvous_server(custom);
+    if !s0.is_empty() {
+        let s = crate::increase_port(&s0, -2);
+        if s == s0 {
+            return format!("http://{}:{}", s, config::RENDEZVOUS_PORT - 2);
+        } else {
+            return format!("http://{}", s);
+        }
+    }
+    "https://admin.rustdesk.com".to_owned()
 }
 
 #[inline]
