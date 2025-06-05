@@ -1012,7 +1012,7 @@ class _SafetyState extends State<_Safety> with AutomaticKeepAliveClientMixin {
                   enabled: enabled, fakeValue: fakeValue),
             _OptionCheckBox(context, 'Enable remote configuration modification',
                 kOptionAllowRemoteConfigModification,
-                enabled: enabled, fakeValue: true),
+                enabled: enabled, fakeValue: fakeValue),
           ],
         ),
       ]);
