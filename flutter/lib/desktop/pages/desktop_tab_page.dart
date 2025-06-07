@@ -25,7 +25,7 @@ class DesktopTabPage extends StatefulWidget {
       builder: (BuildContext context) {
         String inputPassword = '';
         return AlertDialog(
-          title: Text('Enter Password'),
+          title: Text(translate("Password Required")),
           content: TextField(
             obscureText: true,
             onChanged: (value) {
@@ -38,13 +38,13 @@ class DesktopTabPage extends StatefulWidget {
               onPressed: () {
                 Navigator.of(context).pop(inputPassword);
               },
-              child: Text('OK'),
+              child: Text(translate("OK")),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: Text(translate("Cancel")),
             ),
           ],
         );
@@ -69,7 +69,7 @@ class DesktopTabPage extends StatefulWidget {
         }
       } else {
         ScaffoldMessenger.of(Get.context!).showSnackBar(
-          SnackBar(content: Text('Incorrect password')),
+          SnackBar(content: Text(translate("Wrong Password"))),
         );
       }
     }
