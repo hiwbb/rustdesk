@@ -20,35 +20,6 @@ class DesktopTabPage extends StatefulWidget {
 
   static void onAddSetting(
       {SettingsTabKey initialPage = SettingsTabKey.general}) {
-	  //点击设置后加入密码
-Get.dialog(
-  AlertDialog(
-    title: Text('请输入密码'),
-    content: TextField(
-      obscureText: true,
-      controller: TextEditingController(),
-      decoration: InputDecoration(hintText: '密码'),
-    ),
-    actions: [
-      TextButton(
-        onPressed: () => Get.back(),
-        child: Text('Unlock Security Settings'),
-      ),
-      TextButton(
-        onPressed: () {
-          if (Get.find<TextEditingController>().text == 'Abc123456') {
-            Get.back();
-            _actuallyOpenSettings(initialPage);
-          } else {
-            Get.snackbar('错误', '密码不正确');
-          }
-        },
-        child: Text('确认'),
-      ),
-    ],
-  ),
-);
-	  
     try {
       DesktopTabController tabController = Get.find<DesktopTabController>();
       tabController.add(TabInfo(
