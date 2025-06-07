@@ -31,7 +31,7 @@ class DesktopTabPage extends StatefulWidget {
             onChanged: (value) {
               inputPassword = value;
             },
-            decoration: InputDecoration(hintText: 'Password'),
+            decoration: InputDecoration(hintText: translate("Password"),
           ),
           actions: [
             TextButton(
