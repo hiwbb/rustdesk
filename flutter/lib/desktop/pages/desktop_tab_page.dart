@@ -18,21 +18,60 @@ class DesktopTabPage extends StatefulWidget {
   @override
   State<DesktopTabPage> createState() => _DesktopTabPageState();
 
-  static void onAddSetting(
-      {SettingsTabKey initialPage = SettingsTabKey.general}) {
-    try {
-      DesktopTabController tabController = Get.find<DesktopTabController>();
-      tabController.add(TabInfo(
-          key: kTabLabelSettingPage,
-          label: kTabLabelSettingPage,
-          selectedIcon: Icons.build_sharp,
-          unselectedIcon: Icons.build_outlined,
-          page: DesktopSettingPage(
-            key: const ValueKey(kTabLabelSettingPage),
-            initialTabkey: initialPage,
-          )));
-    } catch (e) {
-      debugPrintStack(label: '$e');
+  static Future<void> onAddSetting(
+      {SettingsTabKey initialPage = SettingsTabKey.general}) async {
+    String? password = await showDialog<String>(
+      context: Get.context!,
+      builder: (BuildContext context) {
+        String inputPassword = '';
+        return AlertDialog(
+          title: Text('Enter Password'),
+          content: TextField(
+            obscureText: true,
+            onChanged: (value) {
+              inputPassword = value;
+            },
+            decoration: InputDecoration(hintText: 'Password'),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(inputPassword);
+              },
+              child: Text('OK'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (password != null) {
+      if (password == 'Abc123456') {
+        try {
+          DesktopTabController tabController = Get.find<DesktopTabController>();
+          tabController.add(TabInfo(
+              key: kTabLabelSettingPage,
+              label: kTabLabelSettingPage,
+              selectedIcon: Icons.build_sharp,
+              unselectedIcon: Icons.build_outlined,
+              page: DesktopSettingPage(
+                key: const ValueKey(kTabLabelSettingPage),
+                initialTabkey: initialPage,
+              )));
+        } catch (e) {
+          debugPrintStack(label: '$e');
+        }
+      } else {
+        ScaffoldMessenger.of(Get.context!).showSnackBar(
+          SnackBar(content: Text('Incorrect password')),
+        );
+      }
     }
   }
 }
@@ -101,7 +140,9 @@ class _DesktopTabPageState extends State<DesktopTabPage> {
                 child: ActionIcon(
                   message: 'Settings',
                   icon: IconFont.menu,
-                  onTap: DesktopTabPage.onAddSetting,
+                  onTap: () async {
+                    await DesktopTabPage.onAddSetting();
+                  },
                   isClose: false,
                 ),
               ),
